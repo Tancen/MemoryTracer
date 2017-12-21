@@ -3,8 +3,6 @@
 #include <new.h>
 #include <mutex>
 
-#define SAFE_DECREF(obj) if(obj) Py_DECREF(obj)
-
 namespace MemoryTrace
 {
     bool init();
@@ -23,9 +21,9 @@ namespace MemoryTrace
         }
         ~Recorder()
         {
-            SAFE_DECREF(m_obj);
-            SAFE_DECREF(m_class);
-            SAFE_DECREF(m_module);
+            Py_CLEAR(m_obj);
+            Py_CLEAR(m_class);
+            Py_CLEAR(m_module);
             //Py_Finalize();
         }
 
@@ -59,9 +57,9 @@ namespace MemoryTrace
                 return true;
             } while (false);
 
-            SAFE_DECREF(m_obj);
-            SAFE_DECREF(m_class);
-            SAFE_DECREF(m_module);
+            Py_CLEAR(m_obj);
+            Py_CLEAR(m_class);
+            Py_CLEAR(m_module);
 
             m_obj = NULL;
             m_class = NULL;
@@ -115,7 +113,7 @@ namespace MemoryTrace
 
             }
             while (false);
-            SAFE_DECREF(ret);
+            Py_CLEAR(ret);
 
             return m_strDump;
         }
